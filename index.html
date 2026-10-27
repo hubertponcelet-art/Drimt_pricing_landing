@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drimt pricing: plans that scale with your risk surface</title>
+<meta name="description" content="Drimt plans for NIS2, ISO 27001, GDPR, DORA and the EU AI Act. Estimate your cost, choose annual or quarterly billing and start your free trial.">
+<style>
+:root{
+  /* tokens read from drimt.ai/pricing */
+  --bg:#070A13; --fg:#ECF3F3; --muted:#A5B0C0; --border:#242B38;
+  --accent:#19F0DB; --accent-text:#33FFEB; --on-accent:#080C16;
+  --card:rgba(17,22,34,.4); --radius:17.6px; --radius-sm:7.6px;
+  --warn:#FFB020;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:24px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+p,h1,h2,h3,ul{margin:0}
+ul{padding:0;list-style:none}
+.wrap{max-width:1104px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:12px;line-height:16px;font-weight:400;letter-spacing:2.4px;text-transform:uppercase;color:var(--accent);text-align:center}
+h1{font-size:clamp(32px,6vw,48px);line-height:1;font-weight:600;text-align:center;margin-top:16px}
+h2{font-size:30px;line-height:36px;font-weight:600;text-align:center;margin-top:12px}
+.sub{color:var(--muted);text-align:center;max-width:600px;margin:20px auto 0}
+.muted{color:var(--muted)}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:rgba(7,10,19,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:24px;height:60px}
+.logo{display:flex;align-items:center;gap:8px;color:var(--accent);font-weight:600;font-size:14px;letter-spacing:1.4px;text-transform:uppercase}
+.logo svg{width:24px;height:24px}
+.bar nav{display:flex;gap:24px}
+.bar nav a{font-size:14px;line-height:20px;color:var(--muted)}
+.bar nav a:hover,.bar nav a[aria-current]{color:var(--fg)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;font:500 14px/20px var(--font);padding:10px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg);color:var(--fg);cursor:pointer;transition:filter .12s ease}
+.btn:hover{filter:brightness(1.15)}
+.btn:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn-tint{background:rgba(51,255,235,.07);border:1px solid rgba(51,255,235,.3);color:var(--accent-text);font-weight:600;letter-spacing:.14px;border-radius:10px;padding:8px 16px}
+.btn-block{width:100%}
+
+/* hero */
+.hero{padding:72px 0 16px}
+.checks{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 24px;margin:24px 0 0;font-size:14px;color:var(--muted)}
+.checks li{display:flex;align-items:center;gap:8px}
+.ck{width:16px;height:16px;flex:none;color:var(--accent)}
+.toggle-row{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;margin-top:32px}
+.toggle{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px}
+.toggle button{font:500 14px/20px var(--font);color:var(--muted);background:transparent;border:0;border-radius:7px;padding:8px 16px;cursor:pointer}
+.toggle button[aria-checked="true"]{background:var(--accent);color:var(--on-accent)}
+.save{font-size:12px;line-height:16px;font-weight:500;color:var(--accent);background:rgba(25,240,219,.1);border:1px solid rgba(25,240,219,.3);border-radius:999px;padding:4px 12px}
+
+/* plans */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:48px 0 24px}
+.plan{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.plan.featured{border-color:var(--accent);box-shadow:0 0 0 1px rgba(25,240,219,.25),0 8px 30px -10px rgba(25,240,219,.35)}
+.pill{position:absolute;top:-10px;left:24px;background:var(--accent);color:var(--on-accent);font-size:12px;line-height:16px;font-weight:500;padding:2px 12px;border-radius:999px}
+.plan h3{font-size:20px;line-height:28px;font-weight:600}
+.plan .for{font-size:14px;line-height:20px;color:var(--muted);margin-top:8px;min-height:60px}
+.price-line{margin-top:20px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.price-from{font-size:14px;color:var(--muted)}
+.price{font-size:30px;line-height:36px;font-weight:600}
+.unit{font-size:14px;line-height:20px;color:var(--muted)}
+.price-sub{font-size:13px;line-height:18px;color:var(--muted);margin-top:4px;min-height:18px}
+.setup{font-size:13px;line-height:18px;color:var(--muted);margin-top:12px;min-height:36px}
+.features{display:grid;gap:8px;margin-top:16px;font-size:14px;line-height:20px}
+.features li{display:flex;gap:10px}
+.features li.no{color:var(--muted)}
+.features .dash{width:16px;flex:none;text-align:center;color:var(--muted)}
+.features b{font-weight:500}
+.features .k{color:var(--muted)}
+.plan .cta-row{margin-top:auto;padding-top:24px;display:grid;gap:8px}
+.link{font-size:13px;line-height:20px;text-align:center;color:var(--muted)}
+@media (min-width:961px){.fwbox{min-height:136px}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;font-size:12px;line-height:16px;padding:3px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.chip.on{background:rgba(25,240,219,.07);border-color:rgba(25,240,219,.3);color:var(--fg)}
+.chip.core{border-color:var(--accent);color:var(--accent-text);font-weight:600}
+.chip.on.core{background:rgba(25,240,219,.14)}
+.chip.mod{border-style:dashed}
+.fwnote{font-size:12px;line-height:16px;color:var(--muted);margin-top:8px}
+.chip-opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.chip-opts label{position:relative;cursor:pointer;margin:0;display:inline-block;font-weight:400}
+.chip-opts input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip-opts span{display:inline-flex;align-items:center;font-size:13px;line-height:18px;padding:5px 14px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+.chip-opts .core span{border-color:rgba(25,240,219,.55);color:var(--accent-text);font-weight:600}
+.chip-opts input:checked + span{background:rgba(25,240,219,.14);border-color:var(--accent);color:var(--fg)}
+.chip-opts .core input:checked + span{color:var(--accent-text)}
+.chip-opts input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.field .lab{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:500;margin-bottom:6px}
+.link:hover{color:var(--fg)}
+
+/* sections */
+section.block{padding:72px 0 0}
+.est{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px;margin-top:32px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.field{margin-bottom:20px}
+.field label{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:500;margin-bottom:6px}
+.field output{color:var(--accent);font-variant-numeric:tabular-nums}
+.field .hint{font-size:12.5px;line-height:18px;color:var(--muted);margin-top:4px}
+input[type=range]{width:100%;accent-color:var(--accent);height:24px}
+.check{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;font-size:14px;cursor:pointer}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent)}
+.check small{display:block;color:var(--muted);font-size:12.5px;line-height:18px}
+.form-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px}
+.reset{background:none;border:0;color:var(--muted);font:400 13px var(--font);cursor:pointer;text-decoration:underline}
+.rcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.rcard{position:relative;text-align:left;background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;font-family:var(--font)}
+.rcard[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px rgba(25,240,219,.25)}
+.rcard .rname{font-size:14px;font-weight:600}
+.rcard .rtotal{font-size:24px;line-height:32px;font-weight:600;margin-top:6px}
+.rcard .rline{font-size:12.5px;line-height:18px;color:var(--muted)}
+.rcard .rbadge{position:absolute;top:-10px;right:12px;background:var(--accent);color:var(--on-accent);font-size:12px;line-height:16px;font-weight:500;padding:2px 10px;border-radius:999px}
+.rcard.off{opacity:.55}
+.rcard .rwarn{font-size:12.5px;line-height:18px;color:var(--warn);margin-top:8px}
+.detail h3{font-size:18px;line-height:26px;font-weight:600}
+table.bd{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+table.bd td{padding:10px 0;border-bottom:1px solid var(--border);vertical-align:top}
+table.bd td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.bd tr.sub td{color:var(--muted);font-size:13px}
+table.bd tr.total td{font-weight:600;font-size:16px;border-bottom:0;padding-top:14px}
+table.bd tr.total td:last-child{color:var(--accent)}
+.savebox{margin-top:16px;border:1px solid rgba(25,240,219,.3);background:rgba(25,240,219,.07);border-radius:12px;padding:12px 14px;font-size:14px}
+.detail .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.note{font-size:12.5px;line-height:18px;color:var(--muted);margin-top:12px}
+
+.faq{max-width:800px;margin:32px auto 0}
+details{border:1px solid var(--border);border-radius:12px;padding:0 18px;margin-bottom:10px;background:var(--card)}
+summary{padding:16px 0;font-weight:500;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--accent)}
+details[open] summary::after{content:"\2212"}
+details p{padding:0 0 16px;color:var(--muted);font-size:14px;line-height:22px}
+.cta{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center}
+.cta .row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:24px}
+footer{margin-top:72px;border-top:1px solid var(--border);padding:24px 0 48px;color:var(--muted);font-size:13px;line-height:20px;text-align:center}
+
+@media (max-width:960px){
+  .plans{grid-template-columns:1fr;padding-top:40px}
+  .est{grid-template-columns:1fr}
+  .rcards{grid-template-columns:1fr}
+  .bar nav{display:none}
+  .plan .for{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ck" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="https://www.drimt.ai/" aria-label="Drimt home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>Drimt
+    </a>
+    <nav aria-label="Main">
+      <a href="https://www.drimt.ai/#industries">Industries</a>
+      <a href="https://www.drimt.ai/trainings">Trainings</a>
+      <a href="https://www.drimt.ai/ai-act-readiness">AI Act check</a>
+      <a href="https://www.drimt.ai/pricing" aria-current="page">Pricing</a>
+      <a href="https://www.drimt.ai/faq">FAQ</a>
+      <a href="https://www.drimt.ai/contact">Contact</a>
+    </nav>
+    <a class="btn btn-tint" data-trial href="#">Start your free trial</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Pricing</p>
+    <h1>Plans that scale with your risk surface</h1>
+    <p class="sub">One workspace for NIS2, ISO 27001, GDPR, DORA and the EU AI Act. Annual and quarterly plans, in euros, excluding VAT. Estimate your own cost below.</p>
+    <ul class="checks">
+      <li><svg class="ck"><use href="#ck"/></svg>Free trial</li>
+      <li><svg class="ck"><use href="#ck"/></svg>Connectors live in 1 business day</li>
+      <li><svg class="ck"><use href="#ck"/></svg>Logs included in every plan</li>
+    </ul>
+    <div class="toggle-row">
+      <div class="toggle" role="radiogroup" aria-label="Billing period">
+        <button type="button" role="radio" aria-checked="false" data-billing="quarterly">Quarterly billing</button>
+        <button type="button" role="radio" aria-checked="true" data-billing="annual">Annual billing</button>
+      </div>
+      <span class="save" id="saveBadge">Save up to 22%</span>
+    </div>
+
+    <div class="plans" id="plans">
+      <article class="plan" data-plan="growth">
+        
+        <h3>Growth</h3>
+        <p class="for">A first compliance programme on the framework that matters most.</p>
+        <div class="price-line"><span class="price" data-price>€5,880</span><span class="unit" data-unit>per year</span></div>
+        <p class="price-sub" data-sub>€490 per month equivalent</p>
+        <p class="setup" data-setup>One-time setup fee €990</p>
+        <ul class="features">
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Connectors:</span> <b>3</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Logs included:</span> <b>15 GB/month</b></span></li>
+          <li class="fw"><div class="fwbox"><span class="k">Frameworks:</span> <b>1 of your choice</b><div class="chips"><span class="chip core">NIS2</span><span class="chip core">ISO 27001</span><span class="chip">GDPR</span><span class="chip">DORA</span><span class="chip">EU AI Act</span></div><p class="fwnote">Choose 1. NIS2 and ISO 27001 are the core mappings.</p></div></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Legal entities:</span> <b>1 included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Hot retention:</span> <b>30 days</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">AI credits:</span> <b>500/month</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">CFO module:</span> <b>Add-on</b></span></li>
+          <li class="no"><span class="dash">–</span><span><span class="k">SSO and signed audit trail:</span> –</span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Support:</span> <b>Standard support</b></span></li>
+          <li class="no"><span class="dash">–</span><span><span class="k">Self-hosted option:</span> –</span></li>
+        </ul>
+        <div class="cta-row"><a class="btn btn-block" data-trial href="#">Start your free trial</a><a class="link" data-demo href="#">or book a demo</a></div>
+      </article>
+      <article class="plan featured" data-plan="enterprise">
+        <span class="pill">Recommended</span>
+        <h3>Enterprise</h3>
+        <p class="for">Board reporting, every framework and a signed audit trail.</p>
+        <div class="price-line"><span class="price" data-price>€15,480</span><span class="unit" data-unit>per year</span></div>
+        <p class="price-sub" data-sub>€1,290 per month equivalent</p>
+        <p class="setup" data-setup>Setup fee €2,900, credited with annual billing</p>
+        <ul class="features">
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Connectors:</span> <b>10</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Logs included:</span> <b>150 GB/month</b></span></li>
+          <li class="fw"><div class="fwbox"><span class="k">Frameworks:</span> <b>All 5 included</b><div class="chips"><span class="chip on core">NIS2</span><span class="chip on core">ISO 27001</span><span class="chip on">GDPR</span><span class="chip on">DORA</span><span class="chip on">EU AI Act</span><span class="chip mod on">CSRD (module)</span></div><p class="fwnote">All included. NIS2 and ISO 27001 are the core mappings.</p></div></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Legal entities:</span> <b>1 included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Hot retention:</span> <b>12 months</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">AI credits:</span> <b>7,500/month</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">CFO module:</span> <b>Included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">SSO and signed audit trail:</span> <b>Included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Support:</span> <b>99.5% SLA</b></span></li>
+          <li class="no"><span class="dash">–</span><span><span class="k">Self-hosted option:</span> –</span></li>
+        </ul>
+        <div class="cta-row"><a class="btn btn-primary btn-block" data-trial href="#">Start your free trial</a><a class="link" data-demo href="#">or book a demo</a></div>
+      </article>
+      <article class="plan" data-plan="corporate">
+        
+        <h3>Corporate</h3>
+        <p class="for">Groups of entities and contractual assurance, in the cloud or self-hosted.</p>
+        <div class="price-line"><span class="price-from">from</span><span class="price" data-price>€33,480</span><span class="unit" data-unit>per year</span></div>
+        <p class="price-sub" data-sub>€2,790 per month equivalent</p>
+        <p class="setup" data-setup>Setup fee €3,900, credited with annual billing</p>
+        <ul class="features">
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Connectors:</span> <b>20</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Logs included:</span> <b>500 GB/month</b></span></li>
+          <li class="fw"><div class="fwbox"><span class="k">Frameworks:</span> <b>All 5 included</b><div class="chips"><span class="chip on core">NIS2</span><span class="chip on core">ISO 27001</span><span class="chip on">GDPR</span><span class="chip on">DORA</span><span class="chip on">EU AI Act</span><span class="chip mod on">CSRD (module)</span></div><p class="fwnote">All included. NIS2 and ISO 27001 are the core mappings.</p></div></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Legal entities:</span> <b>3 included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Hot retention:</span> <b>24 months</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">AI credits:</span> <b>25,000/month</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">CFO module:</span> <b>Included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">SSO and signed audit trail:</span> <b>Included</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Support:</span> <b>99.9% SLA and DPA</b></span></li>
+          <li><svg class="ck"><use href="#ck"/></svg><span><span class="k">Self-hosted option:</span> <b>Available, from €40,000 per year</b></span></li>
+        </ul>
+        <div class="cta-row"><a class="btn btn-block" data-trial href="#">Start your free trial</a><a class="link" data-demo href="#">or book a demo</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="estimate">
+  <div class="wrap">
+    <p class="eyebrow">Estimate your cost</p>
+    <h2>See what it will cost you</h2>
+    <p class="sub">Start from what each plan includes, then move the sliders to match your needs. We apply the pricing grid and show every plan, billed <strong id="billingWord">annually</strong>.</p>
+
+    <div class="est">
+      <form class="panel" id="form" onsubmit="return false" aria-label="Your needs">
+        <div class="field">
+          <label for="connectors">Connectors <output id="o-connectors"></output></label>
+          <input type="range" id="connectors" min="1" max="40" step="1">
+          <p class="hint">Systems you connect: cloud, identity, code, endpoint, SaaS. Each goes live in 1 business day once you grant read-only access.</p>
+        </div>
+        <div class="field">
+          <label for="entities">Legal entities <output id="o-entities"></output></label>
+          <input type="range" id="entities" min="1" max="10" step="1">
+        </div>
+        <div class="field">
+          <label for="gb">Logs per month (GB) <output id="o-gb"></output></label>
+          <input type="range" id="gb" min="0" max="1500" step="5">
+          <p class="hint">A log is a record line or event received from a connected source. Not sure of your volume? Book a demo and we run a free audit scan of your stack.</p>
+        </div>
+        <div class="field" id="fwField">
+          <div class="lab" id="fwLab">Regulatory frameworks <output id="o-fw"></output></div>
+          <div class="chip-opts" role="group" aria-labelledby="fwLab">
+            <label class="core"><input type="checkbox" data-name="NIS2" checked><span>NIS2</span></label>
+            <label class="core"><input type="checkbox" data-name="ISO 27001" ><span>ISO 27001</span></label>
+            <label class=""><input type="checkbox" data-name="GDPR" ><span>GDPR</span></label>
+            <label class=""><input type="checkbox" data-name="DORA" ><span>DORA</span></label>
+            <label class=""><input type="checkbox" data-name="EU AI Act" ><span>EU AI Act</span></label>
+          </div>
+          <p class="hint">Growth includes 1 framework of your choice; Enterprise and Corporate include all of them. NIS2 and ISO 27001 are highlighted as the core mappings. CSRD is part of the Sustainability module.</p>
+        </div>
+        <div class="field">
+          <label for="credits">AI credits per month <output id="o-credits"></output></label>
+          <input type="range" id="credits" min="0" max="30000" step="500">
+        </div>
+        <label class="check"><input type="checkbox" id="cfo"><span>Board-ready cyber risk in euros<small>CFO module</small></span></label>
+        <label class="check"><input type="checkbox" id="esg"><span>Environmental and social risk, CSRD mapping<small>Sustainability module</small></span></label>
+        <div class="form-foot">
+          <div class="toggle" role="radiogroup" aria-label="Billing period for the estimate">
+            <button type="button" role="radio" aria-checked="false" data-billing="quarterly">Quarterly</button>
+            <button type="button" role="radio" aria-checked="true" data-billing="annual">Annual</button>
+          </div>
+          <button type="button" class="reset" id="reset">Reset to included</button>
+        </div>
+      </form>
+
+      <div aria-live="polite">
+        <div class="rcards" id="rcards"></div>
+        <div class="panel detail" id="detail"></div>
+      </div>
+    </div>
+    <noscript><p class="note">The estimator needs JavaScript. The plan prices above are final list prices.</p></noscript>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <p class="eyebrow">Questions</p>
+    <h2>Good to know</h2>
+    <div class="faq">
+      <details><summary>Which regulatory frameworks are covered?</summary><p>NIS2, ISO 27001, GDPR, DORA and the EU AI Act. NIS2 and ISO 27001 are our core mappings. CSRD mapping is part of the Sustainability module. Growth includes one framework of your choice; Enterprise and Corporate include all of them.</p></details>
+      <details><summary>What is a log?</summary><p>A log is a record line or event received from one of your connected sources. Log volume is counted in GB per month, when we receive it.</p></details>
+      <details><summary>What if I need more connectors, volume or AI credits?</summary><p>Extra connectors, log volume steps and AI credit packs are added at the prices shown in your estimate. On Growth and Enterprise, together they never cost more than the price difference to the next plan.</p></details>
+      <details><summary>What is the setup fee?</summary><p>A one-time fee to onboard your first connectors. On Enterprise and Corporate it is credited in full against your first annual invoice when you choose annual billing at signing or within 90 days.</p></details>
+      <details><summary>What is the difference between annual and quarterly billing?</summary><p>Annual billing is paid once a year and covers 12 months for the price of 10. Quarterly billing is paid every three months and covers 12 months for the price of 11, so annual billing saves about 9% on the platform fee, plus the setup-fee credit on Enterprise and Corporate.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="cta">
+      <p class="eyebrow">Next</p>
+      <h2>Start with a free trial</h2>
+      <p class="sub">See your own risks, mapped to your frameworks. Or talk to us first and get a free audit scan of your stack.</p>
+      <div class="row">
+        <a class="btn btn-primary" data-trial href="#">Start your free trial</a>
+        <a class="btn" data-demo href="#">Book a demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Prices in euros, excluding VAT. Corporate is a starting price, scoped with you. Extended cold retention is billed at €0.02 per GB-month. Estimates are indicative: your final quote is confirmed after your trial or demo.</p>
+  </div>
+</footer>
+
+<script>
+/* MODEL:START */
+const CONFIG = {
+  "trialUrl": "https://www.drimt.ai/pricing#book",
+  "demoUrl": "https://www.drimt.ai/pricing#book",
+  "quarterlyPremium": 0.1,
+  "quarterlyMonths": 11,
+  "grace": 1.2,
+  "coldRate": "\u20ac0.02"
+};
+const FRAMEWORKS = [{"id": "nis2", "name": "NIS2", "core": true}, {"id": "iso27001", "name": "ISO 27001", "core": true}, {"id": "gdpr", "name": "GDPR", "core": false}, {"id": "dora", "name": "DORA", "core": false}, {"id": "aiact", "name": "EU AI Act", "core": false}];
+const PLANS = [
+ {
+  "id": "growth",
+  "name": "Growth",
+  "annual": 5880,
+  "conn": 3,
+  "gb": 15,
+  "ai": 500,
+  "ent": 1,
+  "fw": 1,
+  "entFee": 2160,
+  "connPerEnt": 1,
+  "connFee": 1068,
+  "packFee": 60,
+  "fwFee": 2400,
+  "cfo": 4680,
+  "esg": null,
+  "setup": 990,
+  "credit": 0,
+  "steps": [
+   [
+    30,
+    1080
+   ],
+   [
+    60,
+    3078
+   ],
+   [
+    100,
+    5508
+   ]
+  ],
+  "cap": 9600
+ },
+ {
+  "id": "enterprise",
+  "name": "Enterprise",
+  "annual": 15480,
+  "conn": 10,
+  "gb": 150,
+  "ai": 7500,
+  "ent": 1,
+  "fw": 5,
+  "entFee": 5400,
+  "connPerEnt": 2,
+  "connFee": 828,
+  "packFee": 45,
+  "fwFee": 0,
+  "cfo": 0,
+  "esg": 9600,
+  "setup": 2900,
+  "credit": 1,
+  "steps": [
+   [
+    200,
+    2400
+   ],
+   [
+    300,
+    6840
+   ],
+   [
+    400,
+    10800
+   ]
+  ],
+  "cap": 18000
+ },
+ {
+  "id": "corporate",
+  "name": "Corporate",
+  "annual": 33480,
+  "conn": 20,
+  "gb": 500,
+  "ai": 25000,
+  "ent": 3,
+  "fw": 5,
+  "entFee": 9600,
+  "connPerEnt": 2,
+  "connFee": 588,
+  "packFee": 35,
+  "fwFee": 0,
+  "cfo": 0,
+  "esg": 14400,
+  "setup": 3900,
+  "credit": 1,
+  "steps": [
+   [
+    700,
+    7200
+   ],
+   [
+    1000,
+    17100
+   ],
+   [
+    1500,
+    32400
+   ]
+  ],
+  "cap": null
+ }
+];
+
+function computeTier(p, c) {
+  const extraEnt = Math.max(c.entities - p.ent, 0);
+  const entCost = extraEnt * p.entFee;
+  const connIncl = p.conn + extraEnt * p.connPerEnt;
+  const extraConn = Math.max(c.connectors - connIncl, 0);
+  const connCost = extraConn * p.connFee;
+  let step = -1, logCost = 0, overTop = false;
+  if (c.gb > p.gb * CONFIG.grace) {
+    if (c.gb <= p.steps[0][0]) step = 0;
+    else if (c.gb <= p.steps[1][0]) step = 1;
+    else { step = 2; if (c.gb > p.steps[2][0]) overTop = true; }
+    logCost = p.steps[step][1];
+  }
+  const packs = Math.ceil(Math.max(c.credits - p.ai, 0) / 1000);
+  const aiCost = packs * p.packFee * 12;
+  const variable = connCost + logCost + aiCost;
+  const capAdj = p.cap == null ? 0 : -Math.max(variable - p.cap, 0);
+  const extraFw = Math.max(c.fw - p.fw, 0);
+  const fwCost = extraFw * p.fwFee;
+  const cfoCost = c.cfo ? p.cfo : 0;
+  const esgNA = c.esg && p.esg == null;
+  const esgCost = c.esg && p.esg != null ? p.esg : 0;
+  const total = p.annual + entCost + connCost + logCost + aiCost + capAdj + fwCost + cfoCost + esgCost;
+  return { total, extras: total - p.annual, extraEnt, entCost, extraConn, connCost, step, logCost, overTop, packs, aiCost,
+           capAdj, extraFw, fwCost, cfoCost, esgCost, esgNA, eligible: !overTop && !esgNA };
+}
+
+function billingView(p, total, billing) {
+  if (billing === 'quarterly') {
+    const perYear = total * (1 + CONFIG.quarterlyPremium);
+    return { perPeriod: perYear / 4, unit: 'per quarter', perYear, setup: p.setup, year1: perYear + p.setup };
+  }
+  const setup = p.setup * (1 - p.credit);
+  return { perPeriod: total, unit: 'per year', perYear: total, setup, year1: total + setup };
+}
+
+function annualSaving(p, total) {
+  const q = billingView(p, total, 'quarterly').year1;
+  const a = billingView(p, total, 'annual').year1;
+  return { euros: q - a, pct: q > 0 ? (q - a) / q : 0 };
+}
+/* MODEL:END */
+
+const eur = n => '€' + Math.round(n).toLocaleString('en-GB');
+const state = { billing: 'annual', chosen: null };
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const DEFAULTS = { connectors: PLANS[0].conn, entities: PLANS[0].ent, gb: PLANS[0].gb, credits: PLANS[0].ai };
+const fwChecked = () => $$('#fwField input:checked');
+function setFrameworks(n) { $$('#fwField input').forEach((el, k) => { el.checked = k < n; }); }
+
+function cfg() {
+  return { connectors: +$('#connectors').value, entities: +$('#entities').value, gb: +$('#gb').value,
+           fw: fwChecked().length, fwNames: fwChecked().map(el => el.dataset.name), credits: +$('#credits').value, cfo: $('#cfo').checked, esg: $('#esg').checked };
+}
+
+function renderBilling() {
+  $$('[data-billing]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.billing === state.billing)));
+  $('#billingWord').textContent = state.billing === 'annual' ? 'annually' : 'quarterly';
+  PLANS.forEach(p => {
+    const card = document.querySelector('[data-plan="' + p.id + '"]');
+    const v = billingView(p, p.annual, state.billing);
+    card.querySelector('[data-price]').textContent = eur(v.perPeriod);
+    card.querySelector('[data-unit]').textContent = v.unit;
+    card.querySelector('[data-sub]').textContent = state.billing === 'annual'
+      ? eur(p.annual / 12) + ' per month equivalent'
+      : eur(v.perYear) + ' per year, paid every three months';
+    card.querySelector('[data-setup]').textContent = p.credit
+      ? 'Setup fee ' + eur(p.setup) + (state.billing === 'annual' ? ', credited with annual billing' : ' (credited with annual billing)')
+      : 'One-time setup fee ' + eur(p.setup);
+  });
+  renderResults();
+}
+
+function renderResults() {
+  const c = cfg();
+  const rs = PLANS.map(p => ({ p, r: computeTier(p, c) }));
+  const elig = rs.filter(x => x.r.eligible);
+  const best = elig.length ? elig.reduce((a, b) => (b.r.total < a.r.total ? b : a)) : null;
+  let chosen = rs.find(x => x.p.id === state.chosen);
+  if (!chosen || !chosen.r.eligible) chosen = best || rs[0];
+
+  $('#rcards').innerHTML = rs.map(x => {
+    const v = billingView(x.p, x.r.total, state.billing);
+    const warn = x.r.overTop
+      ? (x.p.id === 'corporate' ? 'Above ' + x.p.steps[2][0].toLocaleString('en-GB') + ' GB: we scope it with you' : 'Volume above this plan: choose the next plan')
+      : (x.r.esgNA ? 'Sustainability module not offered on this plan' : '');
+    return '<button type="button" class="rcard' + (x.r.eligible ? '' : ' off') + '" data-pick="' + x.p.id + '" aria-pressed="' + (x.p.id === chosen.p.id) + '">' +
+      (best && best.p.id === x.p.id ? '<span class="rbadge">Best fit for you</span>' : '') +
+      '<div class="rname">' + x.p.name + '</div>' +
+      '<div class="rtotal">' + eur(v.perPeriod) + '</div>' +
+      '<div class="rline">' + v.unit + (state.billing === 'quarterly' ? ' (' + eur(v.perYear) + ' per year)' : '') + '</div>' +
+      '<div class="rline">Plan ' + eur(x.p.annual) + ' + extras ' + eur(x.r.extras) + '</div>' +
+      (warn ? '<div class="rwarn">' + warn + '</div>' : '') + '</button>';
+  }).join('');
+  $$('[data-pick]').forEach(b => b.addEventListener('click', () => { state.chosen = b.dataset.pick; renderResults(); }));
+
+  const p = chosen.p, r = chosen.r, v = billingView(p, r.total, state.billing);
+  const rows = [];
+  const row = (label, amount, cls) => rows.push('<tr class="' + (cls || '') + '"><td>' + label + '</td><td>' + amount + '</td></tr>');
+  row(p.name + ' plan, platform fee', eur(p.annual));
+  if (r.extraEnt) row('Additional entities (' + r.extraEnt + ')', eur(r.entCost));
+  if (r.extraConn) row('Additional connectors (' + r.extraConn + ')', eur(r.connCost));
+  if (r.step >= 0) row('Log volume: step ' + (r.step + 1) + ' (up to ' + p.steps[r.step][0].toLocaleString('en-GB') + ' GB)', eur(r.logCost));
+  if (r.packs) row('AI credit packs (' + r.packs + ' per month)', eur(r.aiCost));
+  if (r.extraFw) row('Additional frameworks (' + r.extraFw + ')', eur(r.fwCost));
+  row('Frameworks: ' + c.fwNames.join(', '), (c.fw <= p.fw ? 'Included' : p.fw + ' included'), 'sub');
+  if (r.cfoCost) row('CFO module', eur(r.cfoCost)); else if (c.cfo) row('CFO module', 'Included', 'sub');
+  if (r.esgCost) row('Sustainability module', eur(r.esgCost));
+  if (r.capAdj) row('Extras capped at the next plan price', '−' + eur(-r.capAdj), 'sub');
+  row('Total per year', eur(r.total), 'total');
+  if (state.billing === 'quarterly') {
+    row('Billed every quarter (' + CONFIG.quarterlyMonths + ' months for 12)', eur(v.perPeriod) + ' × 4', 'sub');
+    row('Setup fee' + (p.credit ? ' (credited with annual billing)' : ''), eur(p.setup), 'sub');
+  } else {
+    row('Billed once a year', eur(v.perPeriod), 'sub');
+    row('Setup fee' + (p.credit ? ' ' + eur(p.setup) + ', credited' : ''), eur(v.setup), 'sub');
+  }
+  row('First-year invoice', eur(v.year1), 'total');
+
+  const s = annualSaving(p, r.total);
+  const saveHtml = state.billing === 'quarterly'
+    ? '<div class="savebox"><strong>Switch to annual billing and save ' + eur(s.euros) + ' (' + Math.round(s.pct * 100) + '%) in your first year.</strong></div>'
+    : '<div class="savebox"><strong>You save ' + eur(s.euros) + ' (' + Math.round(s.pct * 100) + '%) in your first year</strong> compared with quarterly billing.</div>';
+
+  $('#detail').innerHTML = '<h3>' + p.name + (r.eligible ? '' : ' (not suitable for this volume)') + '</h3>' +
+    '<p class="muted" style="font-size:14px">Based on your selection, billed ' + (state.billing === 'annual' ? 'annually' : 'quarterly') + '. Excluding VAT.</p>' +
+    '<table class="bd"><tbody>' + rows.join('') + '</tbody></table>' + saveHtml +
+    '<div class="actions"><a class="btn btn-primary" href="' + CONFIG.trialUrl + '" target="_blank" rel="noopener">Start your free trial</a>' +
+    '<a class="btn" href="' + CONFIG.demoUrl + '" target="_blank" rel="noopener">Book a demo</a></div>' +
+    '<p class="note">Extended cold retention is billed at ' + CONFIG.coldRate + ' per GB-month. This estimate is indicative: your final quote is confirmed after your trial or demo.</p>';
+}
+
+function renderInputs() {
+  const f = n => (+n).toLocaleString('en-GB');
+  ['connectors', 'entities', 'gb', 'credits'].forEach(id => { $('#o-' + id).textContent = f($('#' + id).value); });
+  $('#o-fw').textContent = fwChecked().length + ' selected';
+}
+
+function resetInputs() {
+  Object.keys(DEFAULTS).forEach(k => { $('#' + k).value = DEFAULTS[k]; });
+  setFrameworks(1);
+  $('#cfo').checked = false; $('#esg').checked = false;
+  state.chosen = null;
+  renderInputs(); renderResults();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $$('[data-trial]').forEach(a => { a.href = CONFIG.trialUrl; a.target = '_blank'; a.rel = 'noopener'; });
+  $$('[data-demo]').forEach(a => { a.href = CONFIG.demoUrl; a.target = '_blank'; a.rel = 'noopener'; });
+  const best = Math.max.apply(null, PLANS.map(p => annualSaving(p, p.annual).pct));
+  $('#saveBadge').textContent = 'Save up to ' + Math.round(best * 100) + '%';
+  $$('[data-billing]').forEach(b => b.addEventListener('click', () => { state.billing = b.dataset.billing; renderBilling(); }));
+  $$('#form input').forEach(i => i.addEventListener('input', () => { if (i.type === 'checkbox' && i.closest('#fwField') && !fwChecked().length) i.checked = true; renderInputs(); renderResults(); }));
+  $('#reset').addEventListener('click', resetInputs);
+  Object.keys(DEFAULTS).forEach(k => { $('#' + k).value = DEFAULTS[k]; });
+  setFrameworks(1);
+  renderInputs();
+  renderBilling();
+});
+</script>
+</body>
+</html>
